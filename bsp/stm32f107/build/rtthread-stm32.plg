@@ -1,0 +1,11 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+D:\fhaha\smartcontroller_rtthread\bsp\stm32f107\project.uvproj
+Project File Date:  11/14/2013
+
+<h2>Output:</h2>
+Clean started: Project: 'project'
+   deleting intermediate output files for target 'RT-Thread STM32'

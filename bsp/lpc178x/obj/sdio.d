@@ -1,0 +1,15 @@
+.\obj\sdio.o: drivers\sdio.c
+.\obj\sdio.o: ..\..\include\rtthread.h
+.\obj\sdio.o: ..\..\include\rtdef.h
+.\obj\sdio.o: .\rtconfig.h
+.\obj\sdio.o: C:\Keil\ARM\RV31\Inc\stdarg.h
+.\obj\sdio.o: ..\..\include\rtdebug.h
+.\obj\sdio.o: ..\..\include\rtservice.h
+.\obj\sdio.o: ..\..\include\rtm.h
+.\obj\sdio.o: ..\..\include\rtthread.h
+.\obj\sdio.o: ..\..\components\dfs\include\dfs_fs.h
+.\obj\sdio.o: ..\..\components\dfs\include\dfs_def.h
+.\obj\sdio.o: C:\Keil\ARM\RV31\Inc\stdio.h
+.\obj\sdio.o: drivers\lpc_types.h
+.\obj\sdio.o: C:\Keil\ARM\RV31\Inc\stdint.h
+.\obj\sdio.o: drivers\lpc177x_8x_mci.h

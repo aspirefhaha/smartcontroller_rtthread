@@ -1,0 +1,15 @@
+.\obj\rtgui_xml.o: ..\..\components\rtgui\common\rtgui_xml.c
+.\obj\rtgui_xml.o: ..\..\components\rtgui\include\rtgui/rtgui_xml.h
+.\obj\rtgui_xml.o: ..\..\components\rtgui\include\rtgui/rtgui.h
+.\obj\rtgui_xml.o: ..\..\include\rtthread.h
+.\obj\rtgui_xml.o: ..\..\include\rtdef.h
+.\obj\rtgui_xml.o: .\rtconfig.h
+.\obj\rtgui_xml.o: C:\Keil\ARM\RV31\Inc\stdarg.h
+.\obj\rtgui_xml.o: ..\..\include\rtdebug.h
+.\obj\rtgui_xml.o: ..\..\include\rtservice.h
+.\obj\rtgui_xml.o: ..\..\include\rtm.h
+.\obj\rtgui_xml.o: ..\..\include\rtthread.h
+.\obj\rtgui_xml.o: ..\..\components\rtgui\include\rtgui/rtgui_config.h
+.\obj\rtgui_xml.o: ..\..\components\rtgui\include\rtgui/rtgui_object.h
+.\obj\rtgui_xml.o: ..\..\components\rtgui\include\rtgui/rtgui.h
+.\obj\rtgui_xml.o: ..\..\components\rtgui\include\rtgui/rtgui_system.h

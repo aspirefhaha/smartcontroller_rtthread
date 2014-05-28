@@ -1,0 +1,11 @@
+.\obj\debug_frmwrk.o: applications\debug_frmwrk.c
+.\obj\debug_frmwrk.o: drivers\lpc177x_8x_libcfg_default.h
+.\obj\debug_frmwrk.o: drivers\lpc_types.h
+.\obj\debug_frmwrk.o: C:\Keil\ARM\RV31\Inc\stdint.h
+.\obj\debug_frmwrk.o: applications\debug_frmwrk.h
+.\obj\debug_frmwrk.o: drivers\lpc177x_8x_uart.h
+.\obj\debug_frmwrk.o: CMSIS\CM3\DeviceSupport\NXP\LPC177x_8x\LPC177x_8x.h
+.\obj\debug_frmwrk.o: CMSIS\CM3\CoreSupport\core_cm3.h
+.\obj\debug_frmwrk.o: CMSIS\CM3\CoreSupport\core_cmInstr.h
+.\obj\debug_frmwrk.o: CMSIS\CM3\CoreSupport\core_cmFunc.h
+.\obj\debug_frmwrk.o: drivers\lpc177x_8x_pinsel.h

@@ -1,0 +1,21 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+D:\fhaha\rt-thread-master\bsp\lpc178x\project.uvproj
+Project File Date:  05/26/2014
+
+<h2>Output:</h2>
+Build target 'RT-Thread LPC17xx'
+compiling main_win.c...
+test_xml\main_win.c(128): warning:  #177-D: variable "plusbtn" was declared but never referenced
+test_xml\main_win.c(128): warning:  #177-D: variable "minusbtn" was declared but never referenced
+test_xml\main_win.c(130): warning:  #550-D: variable "dheight" was set but never used
+test_xml\main_win.c(477): warning:  #1293-D: assignment in condition
+linking...
+Program Size: Code=258904 RO-data=200804 RW-data=1720 ZI-data=21048  
+FromELF: creating hex file...
+".\obj\rtthread-lpc.axf" - 0 Error(s), 4 Warning(s).
+Clean started: Project: 'project'
+   deleting intermediate output files for target 'RT-Thread LPC17xx'

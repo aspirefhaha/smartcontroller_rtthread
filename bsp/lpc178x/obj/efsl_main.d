@@ -1,0 +1,12 @@
+.\obj\efsl_main.o: applications\efsl_main.c
+.\obj\efsl_main.o: CMSIS\CM3\DeviceSupport\NXP\LPC177x_8x\lpc177x_8x.h
+.\obj\efsl_main.o: CMSIS\CM3\CoreSupport\core_cm3.h
+.\obj\efsl_main.o: C:\Keil\ARM\RV31\Inc\stdint.h
+.\obj\efsl_main.o: CMSIS\CM3\CoreSupport\core_cmInstr.h
+.\obj\efsl_main.o: CMSIS\CM3\CoreSupport\core_cmFunc.h
+.\obj\efsl_main.o: applications\monitor.h
+.\obj\efsl_main.o: applications\debug_frmwrk.h
+.\obj\efsl_main.o: drivers\lpc177x_8x_uart.h
+.\obj\efsl_main.o: drivers\lpc_types.h
+.\obj\efsl_main.o: applications\fs_mci.h
+.\obj\efsl_main.o: drivers\lpc177x_8x_mci.h
