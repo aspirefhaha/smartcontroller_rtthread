@@ -11,8 +11,10 @@
 #include <rtgui/widgets/button.h>
 #include <rtgui/widgets/staticline.h>
 #include <rtgui/widgets/box.h>
+#include "gui_example/block_panel.h"
 #include "main_win.h"
 #include "config_init.h"
+#include <finsh.h>
 
 #define MAINTITLE	"欢迎使用XX信息采集系统"
 #define OPERATETITLE	"节点操作界面"
@@ -24,7 +26,8 @@
 #define VMARGIN RTGUI_BORDER_DEFAULT_WIDTH
 #define HMARGIN	RTGUI_BORDER_DEFAULT_WIDTH
 #define TOP_HEIGHT RTGUI_DEFAULT_FONT_SIZE + 2 * VMARGIN
-#define BOTTOM_HEIGHT (RTGUI_WIDGET_DEFAULT_MARGIN * 2 + RTGUI_BORDER_DEFAULT_WIDTH*2 + RTGUI_DEFAULT_FONT_SIZE * 3 / 2)
+#define BOTTOM_HEIGHT (RTGUI_WIDGET_DEFAULT_MARGIN * 2 + RTGUI_BORDER_DEFAULT_WIDTH * 2 + RTGUI_DEFAULT_FONT_SIZE * 3 / 2)
+#define MBUTTON_HEIGHT	(RTGUI_WIDGET_DEFAULT_MARGIN   + RTGUI_BORDER_DEFAULT_WIDTH * 2 + RTGUI_DEFAULT_FONT_SIZE )
 #define BUTTON_MARGIN	6
 
 
@@ -35,6 +38,11 @@ struct rtgui_label      *ope_label = RT_NULL;
 struct rtgui_label 		*adc0_value = RT_NULL;
 struct rtgui_label 		*adc1_value = RT_NULL;
 struct rtgui_label 		*adc2_value = RT_NULL;
+struct rtgui_label 		*dac0_value = RT_NULL;
+struct rtgui_label 		*dac1_value	= RT_NULL;
+
+int dac0val = 0 ;
+int dac1val = 0;
 m_node_t pCurNode = RT_NULL;
 
 void main_view_prev(struct rtgui_object *object, struct rtgui_event *event)
@@ -49,6 +57,73 @@ void main_view_prev(struct rtgui_object *object, struct rtgui_event *event)
         rtgui_notebook_set_current_by_index(nodebook,
                                             --cur_idx);
 }
+
+long adc0set(int value)
+{
+	char strval[12]={0};
+	sprintf(strval," %03d ",value);
+	rtgui_label_set_text(adc0_value,strval);
+	return 0;
+}
+
+long adc1set(int value)
+{
+	char strval[12]={0};
+	sprintf(strval," %03d ",value);
+	rtgui_label_set_text(adc1_value,strval);
+	return 0;
+}
+long adc2set(int value)
+{
+	char strval[12]={0};
+	sprintf(strval," %03d ",value);
+	rtgui_label_set_text(adc2_value,strval);
+	return 0;
+}
+
+#ifdef RT_USING_FINSH
+FINSH_FUNCTION_EXPORT(adc0set,set adc0 module value);
+FINSH_FUNCTION_EXPORT(adc1set,set adc1 module value);
+FINSH_FUNCTION_EXPORT(adc2set,set adc2 module value);
+#endif
+
+void opera_0_plus(struct rtgui_object* object,struct rtgui_event * event)
+{
+	char strval[12]={0};
+
+ 	dac0val++;
+	if(dac0val>255)
+		dac0val = 0;
+	sprintf(strval," %03d ",dac0val);
+	rtgui_label_set_text(dac0_value,strval);
+}
+void opera_1_plus(struct rtgui_object* object,struct rtgui_event * event)
+{
+	char strval[12]={0};
+ 	dac1val++;
+	if(dac1val>255)
+		dac1val = 0;
+	sprintf(strval," %03d ",dac1val);
+	rtgui_label_set_text(dac1_value,strval);
+}
+void opera_0_minus(struct rtgui_object* object,struct rtgui_event * event)
+{
+	char strval[12]={0};
+ 	dac0val--;
+	if(dac0val<0)
+		dac0val = 255;
+	sprintf(strval," %03d ",dac0val);
+	rtgui_label_set_text(dac0_value,strval);
+}
+void opera_1_minus(struct rtgui_object* object,struct rtgui_event * event)
+{
+	char strval[12]={0};
+ 	dac1val--; 
+	if(dac1val<0)
+		dac1val = 255;
+	sprintf(strval," %03d ",dac1val);
+	rtgui_label_set_text(dac1_value,strval);
+} 
 
 void opera_view_back(struct rtgui_object * object,struct rtgui_event * event)
 {
@@ -127,6 +202,7 @@ void arrange_adda_views(rtgui_container_t * container)
 	rtgui_rect_t rect,fontrect;	
 	rtgui_button_t * plusbtn,*minusbtn ;
 	rtgui_label_t * label; 
+	rtgui_panel_t	* dacpanel;
 	int aheight ,dheight ,theight,mwidth;
 
 	client_get_rect(container,&rect); 
@@ -134,14 +210,14 @@ void arrange_adda_views(rtgui_container_t * container)
 	theight = rect.y2 - rect.y1;
 	//ad height
 	aheight = (theight - 6 * VMARGIN - 2 * BUTTON_MARGIN) / 5 ;
-	dheight = (theight - 6 * VMARGIN - 1 * BUTTON_MARGIN) / 2 ;
+	dheight = (theight - 6 * VMARGIN - 1 * BUTTON_MARGIN) / 3 ;
 	//mnode width
 	mwidth = (rect.x2 - rect.x1 - 3 * HMARGIN - BUTTON_MARGIN)/2;
 
 	//ADC0
 	client_get_rect(container,&rect);
 	rect.x1 += HMARGIN;
-	rect.y1 += 2 * VMARGIN;
+	rect.y1 += 4 * VMARGIN;
 	rtgui_font_get_metrics(rtgui_font_default(), AD0MODULE, &fontrect);
 	rect.x2 = rect.x1 + (fontrect.x2 - fontrect.x1);
 	rect.y2 = rect.y1 + (fontrect.y2 - fontrect.y1) + VMARGIN ;
@@ -158,7 +234,7 @@ void arrange_adda_views(rtgui_container_t * container)
 	//ADC1
 	client_get_rect(container,&rect); 
 	rect.x1 += HMARGIN;
-	rect.y1 += 2 * VMARGIN + aheight + VMARGIN;
+	rect.y1 += 4 * VMARGIN + aheight + VMARGIN;
 	rtgui_font_get_metrics(rtgui_font_default(), AD1MODULE, &fontrect);
 	rect.x2 = rect.x1 + (fontrect.x2 - fontrect.x1);
 	rect.y2 = rect.y1 + (fontrect.y2 - fontrect.y1) + VMARGIN ;
@@ -175,12 +251,12 @@ void arrange_adda_views(rtgui_container_t * container)
 	//ADC2
 	client_get_rect(container,&rect); 
 	rect.x1 += HMARGIN;
-	rect.y1 += 2 * VMARGIN + 2*aheight + 2*VMARGIN;
-	rtgui_font_get_metrics(rtgui_font_default(), AD0MODULE, &fontrect);
+	rect.y1 += 4 * VMARGIN + 2*aheight + 2*VMARGIN;
+	rtgui_font_get_metrics(rtgui_font_default(), AD2MODULE, &fontrect);
 	rect.x2 = rect.x1 + (fontrect.x2 - fontrect.x1);
 	rect.y2 = rect.y1 + (fontrect.y2 - fontrect.y1) + VMARGIN ;
 
-	label = rtgui_label_create(AD0MODULE);
+	label = rtgui_label_create(AD2MODULE);
 	rtgui_widget_set_rect(RTGUI_WIDGET(label), &rect);
 	rtgui_container_add_child(container,RTGUI_WIDGET(label));
 	adc2_value = rtgui_label_create("xxxxxxx");
@@ -191,63 +267,99 @@ void arrange_adda_views(rtgui_container_t * container)
 
 	//DAC0
 	client_get_rect(container,&rect);
-	rect.x1 += HMARGIN;
-	rect.y1 += 2 * VMARGIN + 3*aheight + 2*VMARGIN;
+	rect.x1 += 5 * HMARGIN ;
+	rect.y1 += 8 * VMARGIN + 3 * aheight ;
 	rtgui_font_get_metrics(rtgui_font_default(), DA0MODULE, &fontrect);
-	rect.x2 = rect.x1 + (fontrect.x2 - fontrect.x1);
-	rect.y2 = rect.y1 + (fontrect.y2 - fontrect.y1);
+	rect.x2 = rect.x1 + (fontrect.x2 - fontrect.x1) + 2 * HMARGIN;
+	rect.y2 = rect.y1 + dheight;
+
+	dacpanel = rtgui_panel_create(RTGUI_BORDER_STATIC);
+	rtgui_widget_set_rect(RTGUI_WIDGET(dacpanel),&rect);
+
 	label = rtgui_label_create(DA0MODULE);
+	rtgui_container_add_child(container,RTGUI_WIDGET(dacpanel));
+	rect.x1 += HMARGIN;
+	rect.x2 -= HMARGIN;
+	rect.y1 += 2*VMARGIN;
+	rect.y2 =  rect.y1 + fontrect.y2 - fontrect.y1;
 	rtgui_widget_set_rect(RTGUI_WIDGET(label), &rect);
-	rtgui_container_add_child(container,RTGUI_WIDGET(label));
+	rtgui_container_add_child(RTGUI_CONTAINER(dacpanel),RTGUI_WIDGET(label));
+
+	{
+		int oldright=rect.x2;
+		//plus button
+		plusbtn = rtgui_button_create("＋");
+		rect.x2 = rect.x1 + 2 * BUTTON_MARGIN +  RTGUI_DEFAULT_FONT_SIZE;
+		rect.y1 = rect.y2 + 2 * VMARGIN;
+		rect.y2 += MBUTTON_HEIGHT;
+		rtgui_widget_set_rect(RTGUI_WIDGET(plusbtn),&rect);
+		rtgui_button_set_onbutton(plusbtn,opera_0_plus);
+		rtgui_container_add_child(RTGUI_CONTAINER(dacpanel),RTGUI_WIDGET(plusbtn));
+	
+		//dac0 value
+		dac0_value = rtgui_label_create(" 000 ");
+		rect.x1 = rect.x2 + 5 * HMARGIN;
+		rect.x2 = oldright - (2 * BUTTON_MARGIN +  RTGUI_DEFAULT_FONT_SIZE + VMARGIN);
+		rtgui_widget_set_rect(RTGUI_WIDGET(dac0_value),&rect);
+		rtgui_container_add_child(RTGUI_CONTAINER(dacpanel),RTGUI_WIDGET(dac0_value));
+
+		//minus button
+		minusbtn = rtgui_button_create("－");
+		rect.x2 = oldright;
+		rect.x1 = rect.x2 -(2 * BUTTON_MARGIN +  RTGUI_DEFAULT_FONT_SIZE);
+		rtgui_widget_set_rect(RTGUI_WIDGET(minusbtn),&rect);
+		rtgui_button_set_onbutton(minusbtn,opera_0_minus);
+		rtgui_container_add_child(RTGUI_CONTAINER(dacpanel),RTGUI_WIDGET(minusbtn));
+	}
+
 
 	//DAC1
-	//client_get_rect(container,&rect);
-	rect.x1 += mwidth + HMARGIN;
-	//rect.y1 += 2 * VMARGIN + 3*aheight + 2*VMARGIN;
+	client_get_rect(container,&rect);
+	rect.x1 += mwidth + 5 * HMARGIN;
+	rect.y1 += 8 * VMARGIN + 3*aheight ;
 	rtgui_font_get_metrics(rtgui_font_default(), DA1MODULE, &fontrect);
-	rect.x2 = rect.x1 + (fontrect.x2 - fontrect.x1);
+	rect.x2 = rect.x1 + (fontrect.x2 - fontrect.x1) + 2 * HMARGIN;
+	rect.y2 = rect.y1 + dheight;
+
+	dacpanel = rtgui_panel_create(RTGUI_BORDER_STATIC);
+	rtgui_widget_set_rect(RTGUI_WIDGET(dacpanel),&rect);
+	
 	label = rtgui_label_create(DA1MODULE);
+	rtgui_container_add_child(container,RTGUI_WIDGET(dacpanel));
+	rect.x1 += HMARGIN;
+	rect.x2 -= HMARGIN;
+	rect.y1 += 2 * VMARGIN;
+	rect.y2 = fontrect.y2 - fontrect.y1 + rect.y1;
 	rtgui_widget_set_rect(RTGUI_WIDGET(label), &rect);
-	rtgui_container_add_child(container,RTGUI_WIDGET(label));
+	rtgui_container_add_child(RTGUI_CONTAINER(dacpanel),RTGUI_WIDGET(label));
 
-	/*sprintf(conname,"page%02d",	pageindex);
-	do{
-		int nodecount = 0;
-		container = rtgui_container_create();
-		if (container == RT_NULL)
-        	return;
-		
-		while(nodecount<6 && (pcur = next_node(pcur))){
-			char btntext[24]={0};
-			sprintf(btntext,"ID%02d:IP1:IP0",pcur->ip);
-			button = rtgui_button_create(btntext);
-			rtgui_button_set_userdata(button,(void*)pcur);
-			
-			rect.x2 = rect.x1 + mwidth;
-			rect.y2 = rect.y1 + mheight; 	
-			rtgui_widget_set_rect(RTGUI_WIDGET(button), &rect);
-		    rtgui_container_add_child(RTGUI_CONTAINER(container), RTGUI_WIDGET(button));
+	{
+		int oldright=rect.x2;
+		//plus button
+		plusbtn = rtgui_button_create("＋");
+		rect.x2 = rect.x1 + 2 * BUTTON_MARGIN +  RTGUI_DEFAULT_FONT_SIZE;
+		rect.y1 = rect.y2 + 2 * VMARGIN;
+		rect.y2 += MBUTTON_HEIGHT;
+		rtgui_widget_set_rect(RTGUI_WIDGET(plusbtn),&rect);
+		rtgui_button_set_onbutton(plusbtn,opera_1_plus);
+		rtgui_container_add_child(RTGUI_CONTAINER(dacpanel),RTGUI_WIDGET(plusbtn));
+	
+		//dac1 value
+		dac1_value = rtgui_label_create(" 000 ");
+		rect.x1 = rect.x2 + 5 * HMARGIN;
+		rect.x2 = oldright - (2 * BUTTON_MARGIN +  RTGUI_DEFAULT_FONT_SIZE + VMARGIN);
+		rtgui_widget_set_rect(RTGUI_WIDGET(dac1_value),&rect);
+		rtgui_container_add_child(RTGUI_CONTAINER(dacpanel),RTGUI_WIDGET(dac1_value));
 
-			rect.x1 = rect.x2 + HMARGIN + BUTTON_MARGIN;
-			if(rect.x1 >= nodes_rect->x2){
-			 	rect.x1 = nodes_rect->x1 + HMARGIN;
-				rect.y1 = rect.y2 + VMARGIN + BUTTON_MARGIN;
-			}
-			else{
-				
-			}
-			nodecount++;
+		//minus button
+		minusbtn = rtgui_button_create("－");
+		rect.x2 = oldright;
+		rect.x1 = rect.x2 -(2 * BUTTON_MARGIN +  RTGUI_DEFAULT_FONT_SIZE);
+		rtgui_widget_set_rect(RTGUI_WIDGET(minusbtn),&rect);
+		rtgui_button_set_onbutton(minusbtn,opera_1_minus);
+		rtgui_container_add_child(RTGUI_CONTAINER(dacpanel),RTGUI_WIDGET(minusbtn));
+	}
 
-		    rtgui_button_set_onbutton(button, node_click_handle); 	
-		}
-		if(nodecount==0){  //产生了空页
-		   break;
-		}
-		else{
-    		rtgui_notebook_add(nodebook, conname, RTGUI_WIDGET(container));
-			sprintf(conname,"page%02d",++pageindex);
-		}
-	}while(pcur);  */
 } 
 
 void operate_view(const char *title,struct rtgui_notebook * main_notebook)
@@ -498,6 +610,8 @@ void arrange_node_views(struct rtgui_notebook * nodebook,rtgui_rect_t * nodes_re
 		    rtgui_button_set_onbutton(button, node_click_handle); 	
 		}
 		if(nodecount==0){  //产生了空页
+			if(g_pRootNode==RT_NULL)
+				rtgui_notebook_add(nodebook, conname, RTGUI_WIDGET(container));	
 		   break;
 		}
 		else{
